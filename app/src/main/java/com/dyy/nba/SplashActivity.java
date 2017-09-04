@@ -49,8 +49,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    protected boolean isRightAnim() {
-        return false;
+    protected int getAnimState() {
+        return ANIM_SPLASH;
     }
 
     private CountDownTimer timer;

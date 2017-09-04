@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.dyy.nba.commonlibs.NothingActivity;
+
 public class MainActivity extends BaseActivity {
 
     @Override
@@ -17,8 +19,15 @@ public class MainActivity extends BaseActivity {
         initToolbar();
     }
 
+    @Override
+    protected int getAnimState() {
+        return ANIM_MAIN;
+    }
+
+
+
     public void startNewThis(View view){
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this,NothingActivity.class);
         startActivity(intent);
     }
 

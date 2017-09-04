@@ -7,38 +7,42 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 
 import com.dyy.nba.commonlibs.manager.ActivityManager;
-import com.dyy.nba.commonlibs.util.ShareUtils;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        boolean startNew = ShareUtils.getInstance().resetShare("settings").getBoolean("startNew");
 
-         if (startNew && isRightAnim())
+         if (getAnimState()==ANIM_OHTER)
             overridePendingTransition(R.anim.slide_right_in, R.anim.slide_no);
-        else if(!startNew){
-             ShareUtils.getInstance().resetShare("settings").set("startNew", false).commit();
-         }
+        else if(getAnimState() == ANIM_MAIN)
+             overridePendingTransition(R.anim.slide_no_time, R.anim.slide_no_time);
+
         super.onCreate(savedInstanceState);
         setContentView(getChildView());
         ActivityManager.getInstance().addActivity(this);
     }
 
-    protected boolean isRightAnim() {
-        return true;
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    protected static final int ANIM_SPLASH = 1;
+    protected static final int ANIM_MAIN = 2;
+    protected static final int ANIM_OHTER = 3;
+    protected int getAnimState() {
+        return ANIM_OHTER;
     }
 
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
-        ShareUtils.getInstance().set("startNew", true).resetShare("settings").commit();
     }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
-        ShareUtils.getInstance().set("startNew", true).resetShare("settings").commit();
     }
 
     protected abstract int getChildView();

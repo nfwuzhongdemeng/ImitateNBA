@@ -11,6 +11,7 @@ public class NothingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_no);
         super.onCreate(savedInstanceState);
         new AlertDialog.Builder(this).setTitle("错误提示").setMessage("很抱歉，程序出现异常，\n请尝试重启或关闭应用。").setPositiveButton("重启应用", new DialogInterface.OnClickListener() {
             @Override
