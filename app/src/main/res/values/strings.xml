@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ImitateNBA</string>
+
+    <!--SplashActivity-->
+    <string name="splash_second_txt">跳过（%1$d）</string>
+    <string name="title_activity_base">BaseActivity</string>
+</resources>
