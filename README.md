@@ -1,5 +1,5 @@
 # ImitateNBA
-仿照SpintNBA项目的练习项目
+仿照[SpintNBA](https://github.com/smuyyh/SprintNBA)项目的练习项目
 
 ## 解析文章：
  - [SpintNBA项目模仿笔记（一）框架搭建](http://blog.csdn.net/yu_duan_hun/article/details/77833297)
