@@ -2,7 +2,7 @@
 仿照[SpintNBA](https://github.com/smuyyh/SprintNBA)项目的练习项目
 
 ## 解析文章：
- - [SpintNBA项目模仿笔记（一）框架搭建](http://blog.csdn.net/yu_duan_hun/article/details/77833297)
+ - [SpintNBA项目模仿笔记（一）随机启动图](http://blog.csdn.net/yu_duan_hun/article/details/77833297)
  - [SpintNBA项目模仿笔记(二) 主页的一些设置](http://blog.csdn.net/yu_duan_hun/article/details/77833297)
  - [Activity主流启动动画（超详细精髓版）](http://blog.csdn.net/yu_duan_hun/article/details/77836221)
 
