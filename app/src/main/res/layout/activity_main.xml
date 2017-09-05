@@ -5,11 +5,15 @@
     android:orientation="vertical">
     <include layout="@layout/toolbar_head"/>
 
-    <Button
-        android:id="@+id/button"
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/activity_main_drawer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="startNewThis"
-        android:text="Button" />
+        android:layout_height="match_parent">
+        <include
+            layout="@layout/main_all"/>
+        <include
+            layout="@layout/main_left"/>
+
+    </android.support.v4.widget.DrawerLayout>
 
 </LinearLayout>

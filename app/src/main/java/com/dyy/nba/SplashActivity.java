@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dyy.nba.commonlibs.AppUtils;
+import com.dyy.nba.p.BasePresenter;
 
 import java.util.Random;
 
@@ -39,6 +40,10 @@ public class SplashActivity extends BaseActivity {
         //设置去除ActionBar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void initChildView(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         Random random = new Random();
         int num = random.nextInt(5);
@@ -46,6 +51,11 @@ public class SplashActivity extends BaseActivity {
         splashImageLoad.setImageResource(pics[num]);
 
         startTimer();
+    }
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return null;
     }
 
     @Override

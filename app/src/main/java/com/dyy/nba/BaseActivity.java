@@ -1,15 +1,24 @@
 package com.dyy.nba;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 
+import com.dyy.nba.commonlibs.AppUtils;
 import com.dyy.nba.commonlibs.manager.ActivityManager;
+import com.dyy.nba.d.IInteractor;
+import com.dyy.nba.p.BasePresenter;
+import com.dyy.nba.v.IView;
 
-public abstract class BaseActivity extends AppCompatActivity {
-
+/**
+ * 注意所有子类必须实现泛型B替换的接口
+ * @param <B>   mvp的v层
+ * @param <T>   mvp的p层
+ */
+public abstract class BaseActivity<B extends IView, D extends IInteractor,T extends BasePresenter<B,D>> extends AppCompatActivity {
+    protected T presenter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -20,8 +29,19 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(getChildView());
+        
+        initChildView(savedInstanceState);
+        
+        presenter = getPresenter();
+
+        if(presenter!=null)
+            presenter.initData();
         ActivityManager.getInstance().addActivity(this);
     }
+
+    protected abstract void initChildView(Bundle savedInstanceState);
+
+    protected abstract T getPresenter() ;
 
     @Override
     protected void onResume() {
@@ -36,18 +56,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-    }
-
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
-    }
-
-    protected abstract int getChildView();
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             finish();
@@ -57,6 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return false;
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -64,12 +73,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActivityManager.getInstance().removeActivity(this);
     }
 
+    protected abstract int getChildView();
+
     protected void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.common_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            toolbar.setTitle(getToolbarName());//设置Toolbar标题
+            toolbar.setTitleTextColor(getToolbarColor()); //设置标题颜色
         }
+    }
+
+    protected int getToolbarColor() {
+        return Color.parseColor("#ffffff");
+    }
+
+    protected String getToolbarName(){
+        return AppUtils.getResources().getString(R.string.base_title_default);
     }
 }
