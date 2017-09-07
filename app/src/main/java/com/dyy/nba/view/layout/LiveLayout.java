@@ -1,4 +1,4 @@
-package com.dyy.nba.view;
+package com.dyy.nba.view.layout;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

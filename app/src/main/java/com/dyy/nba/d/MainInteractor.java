@@ -35,7 +35,7 @@ public class MainInteractor implements IInteractor{
     }
 
     private final int[] pages = {
-            R.layout.page_top_menu,
+            R.layout.page_top_new,
             R.layout.page_live,
             R.layout.page_score,
             R.layout.page_data,

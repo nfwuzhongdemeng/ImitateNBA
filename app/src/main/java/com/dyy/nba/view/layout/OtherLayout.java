@@ -1,4 +1,4 @@
-package com.dyy.nba.view;
+package com.dyy.nba.view.layout;
 
 import android.content.Context;
 import android.os.Build;
@@ -11,21 +11,21 @@ import android.widget.LinearLayout;
  * Created by 段钰莹 on 2017/9/5.
  */
 
-public class ScoreLayout extends LinearLayout {
-    public ScoreLayout(Context context) {
+public class OtherLayout extends LinearLayout {
+    public OtherLayout(Context context) {
         super(context);
     }
 
-    public ScoreLayout(Context context, @Nullable AttributeSet attrs) {
+    public OtherLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ScoreLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public OtherLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ScoreLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public OtherLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 }

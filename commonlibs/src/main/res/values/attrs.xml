@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TabLayout">
+        <attr name="noSelectWordColor" format="color" />
+        <attr name="selectWordColor" format="color" />
+        <attr name = "dividerColor" format="color"/>
+        <attr name = "dividerWidth" format="dimension"/>
+        <attr name = "dividerTopBottom" format="dimension"/>
+        <attr name = "underlineDrawable" format="reference|color"/>
+        <attr name = "underlineLeftRight" format="dimension"/>
+        <attr name = "underlineHeight" format="dimension"/>
+        <attr name = "allColor" format="color"/>
+    </declare-styleable>
+
+</resources>
