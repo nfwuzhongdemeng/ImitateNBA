@@ -7,7 +7,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -37,7 +36,6 @@ public class TabLayout extends HorizontalScrollView {
     private float underlineLeftRight;
     private float dividerWidth;
     private float underlineHeight;
-    private GradientDrawable mDrawable;
 
     public TabLayout(Context context) {
         super(context);
@@ -81,7 +79,6 @@ public class TabLayout extends HorizontalScrollView {
 
     private int selectedPos = 0;
     private int width = 0;
-    private int ceilWidth = width;
     private int ceilCount = 0;
     private LinearLayout container;
 
@@ -155,16 +152,7 @@ public class TabLayout extends HorizontalScrollView {
                 view.setTextColor(selectWordColor);
             else
                 view.setTextColor(noSelectWordColor);
-            view.setOnClickListener(onClickListener = new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    fromTab = true;
-                    newPos = (int) v.getTag();
-                    if(selectedPos == newPos)
-                        return;
-                     select(newPos);
-                }
-            });
+            view.setOnClickListener(onClickListener);
         }
         invalidate();
     }
@@ -174,13 +162,17 @@ public class TabLayout extends HorizontalScrollView {
 
     private int progress = 0;
 
-    private OnClickListener onClickListener;
-    private static final int TIME = 100;
+    private OnClickListener onClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            fromTab = true;
+            newPos = (int) v.getTag();
+            if(selectedPos == newPos)
+                return;
+            select(newPos);
+        }
+    };
 
-    private float startLeft = 0;
-    private float endLeft = 0;
-    private float startWidth = 0;
-    private float endWidth = 0;
     private float ceils[];
 
     @Override
@@ -202,7 +194,6 @@ public class TabLayout extends HorizontalScrollView {
                     ceils[i] = container.getChildAt(i).getWidth();
                 }
             }
-            startWidth = ceils[0];
         }
 
         if (dividerWidth != 0) {
@@ -236,8 +227,10 @@ public class TabLayout extends HorizontalScrollView {
     private void drawFollowMode(Canvas canvas) {
         if(ceils == null || ceils.length == 0)
             return;
+
         int nowIndex = 0;
         int nextIndex = 0;
+
         if(fromTab){
             nowIndex = selectedPos;
             nextIndex = newPos;
@@ -284,11 +277,13 @@ public class TabLayout extends HorizontalScrollView {
             selectedPos = newPos;
             nextPos = selectedPos;
             followOffset = 0;
+
             final int scrollPos = (int) (realLeft - (getWidth() - realWidth) / 2);
             smoothScrollTo(scrollPos, 0);
         }else if(followOffset == 0 && !fromTab) {
             if(selectedPos == followPos)
                 return;
+
             final int scrollPos = (int) (realLeft - (getWidth() - realWidth) / 2);
             smoothScrollTo(scrollPos, 0);
             selectedPos = followPos;
@@ -299,6 +294,7 @@ public class TabLayout extends HorizontalScrollView {
         if (listener != null) {
             listener.onSelect(selectedPos);
         }
+
         if (outListener != null)
             outListener.onSelect(selectedPos);
     }
@@ -314,6 +310,7 @@ public class TabLayout extends HorizontalScrollView {
             dividerPaint.setStyle(Paint.Style.FILL);
             dividerPaint.setColor(dividerColor);
         }
+
         float left = ceils[0] - dividerWidth / 2;
         float top = dividerTopBottom;
         float right = left + dividerWidth;
@@ -338,6 +335,7 @@ public class TabLayout extends HorizontalScrollView {
         container = new LinearLayout(getContext().getApplicationContext());
         container.setOrientation(LinearLayout.HORIZONTAL);
         addView(container);
+
         for (int i = 0; i < tabs.length; i++) {
             String name = tabs[i];
             TextView tv = new TextView(getContext().getApplicationContext());
@@ -368,6 +366,7 @@ public class TabLayout extends HorizontalScrollView {
         int ceilWidth = width / tabs.length;
         container.setOrientation(LinearLayout.HORIZONTAL);
         addView(container);
+
         for (int i = 0; i < tabs.length; i++) {
             String name = tabs[i];
             TextView tv = new TextView(getContext().getApplicationContext());
