@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -87,6 +88,8 @@ public class TabLayout extends HorizontalScrollView {
     private boolean fromTab =false;
     public void followPos(int position, float positionOffset) {
         followPos = position;
+
+
         if(fromTab){
             int moved = 0;
             if(selectedPos!=container.getChildCount()-1){
@@ -115,13 +118,25 @@ public class TabLayout extends HorizontalScrollView {
                 followOffset = 0;
                 selectedPos = newPos;
             }
-        }else{
 
+            int realLeft = posLeft + moved;
+            int realWidth = container.getChildAt(selectedPos).getWidth();
+            int scrollPos = (int) (realLeft - (getWidth() - realWidth) / 2);
+            scrollTo(scrollPos, 0);
+
+        }else{
             if(positionOffset != 0)
                 newPos = followPos +  1;
             else
                 newPos = followPos;
             followOffset = positionOffset;
+
+            int posLeft = container.getChildAt(position).getLeft();
+            int moved = (int) (container.getChildAt(position).getWidth() * followOffset);
+            int realLeft = posLeft + moved;
+            int realWidth = container.getChildAt(selectedPos).getWidth();
+            int scrollPos = (int) (realLeft - (getWidth() - realWidth) / 2);
+            scrollTo(scrollPos, 0);
         }
 
         invalidate();
@@ -289,12 +304,25 @@ public class TabLayout extends HorizontalScrollView {
             if(scrollPos > getWidth())
                 scrollPos = getWidth();
             smoothScrollTo(scrollPos, 0);
+            resetColor();
+
         }else if(followOffset == 0 && !fromTab) {
             if(selectedPos == followPos)
                 return;
             final int scrollPos = (int) (realLeft - (getWidth() - realWidth) / 2);
             smoothScrollTo(scrollPos, 0);
             selectedPos = followPos;
+            resetColor();
+        }
+    }
+
+    private void resetColor() {
+        for(int i = 0; i < container.getChildCount(); i++){
+            //颜色残留时重置
+            if(i != newPos){
+                TextView temp = (TextView) container.getChildAt(i);
+                temp.setTextColor(Color.WHITE);
+            }
         }
     }
 
