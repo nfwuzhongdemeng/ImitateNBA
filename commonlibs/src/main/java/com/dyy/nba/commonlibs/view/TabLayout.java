@@ -83,11 +83,10 @@ public class TabLayout extends HorizontalScrollView {
     private LinearLayout container;
 
 
-    private int followPos = -1;
-    private int nextPos = 0;
     private float followOffset = 0;
     private boolean fromTab =false;
     public void followPos(int position, float positionOffset) {
+        followPos = position;
         if(fromTab){
             int moved = 0;
             if(selectedPos!=container.getChildCount()-1){
@@ -107,15 +106,21 @@ public class TabLayout extends HorizontalScrollView {
             int moveDistance = posLeft - oldLeft + moved;
 
             int allDistance = newLeft-oldLeft;
-            followOffset = moveDistance*1.0f / allDistance;
-            followPos = position;
+            if(allDistance == 0){
+                followOffset = 0;
+            }else
+                followOffset = moveDistance*1.0f / allDistance;
+
+            if(followOffset == 1) {
+                followOffset = 0;
+                selectedPos = newPos;
+            }
         }else{
-            followPos = position;
 
             if(positionOffset != 0)
-                nextPos = followPos +  1;
+                newPos = followPos +  1;
             else
-                nextPos = followPos;
+                newPos = followPos;
             followOffset = positionOffset;
         }
 
@@ -165,10 +170,13 @@ public class TabLayout extends HorizontalScrollView {
     private OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            fromTab = true;
+
             newPos = (int) v.getTag();
             if(selectedPos == newPos)
                 return;
+            if(selectedPos > newPos){
+                followOffset = 1.0f - followOffset;
+            }
             select(newPos);
         }
     };
@@ -230,13 +238,12 @@ public class TabLayout extends HorizontalScrollView {
 
         int nowIndex = 0;
         int nextIndex = 0;
-
+        nextIndex = newPos;
         if(fromTab){
             nowIndex = selectedPos;
-            nextIndex = newPos;
+
         }else{
             nowIndex = followPos;
-            nextIndex = nextPos;
         }
 
         float posLeft =  container.getChildAt(nowIndex).getLeft();
@@ -260,35 +267,38 @@ public class TabLayout extends HorizontalScrollView {
             underlineDrawable.draw(canvas);
         }
 
+
         //渐变颜色计算
         int color = ColorUtil.caculateColor(selectWordColor, noSelectWordColor, followOffset);
         int color2 = ColorUtil.caculateColor(noSelectWordColor, selectWordColor, followOffset);
 
         TextView tv = (TextView) container.getChildAt(nowIndex);
-        TextView tv2 = null;
-            tv2 = (TextView) container.getChildAt(nextIndex);
+        TextView tv2 = (TextView) container.getChildAt(nextIndex);
 
 
         tv2.setTextColor(color2);
         tv.setTextColor(color);
-        if(fromTab && followPos == newPos && followOffset == 1){
+        if(fromTab && followPos == newPos && followOffset == 0){
             //数据还原，模拟viewpager滑动时数据
             fromTab = false;
             selectedPos = newPos;
-            nextPos = selectedPos;
-            followOffset = 0;
 
-            final int scrollPos = (int) (realLeft - (getWidth() - realWidth) / 2);
+            int scrollPos = (int) (realLeft - (getWidth() - realWidth) / 2);
+            if(scrollPos < 0)
+                scrollPos = 0;
+            if(scrollPos > getWidth())
+                scrollPos = getWidth();
             smoothScrollTo(scrollPos, 0);
         }else if(followOffset == 0 && !fromTab) {
             if(selectedPos == followPos)
                 return;
-
             final int scrollPos = (int) (realLeft - (getWidth() - realWidth) / 2);
             smoothScrollTo(scrollPos, 0);
             selectedPos = followPos;
         }
     }
+
+    private int followPos = 0;
 
     private void select(int selectedPos) {
         if (listener != null) {
@@ -388,10 +398,11 @@ public class TabLayout extends HorizontalScrollView {
         return height < width ? height : width;
     }
 
+    private final String TAG = "TabLayout";
     public void setTab(int position){
         if(ceils == null || ceils.length == 0)
             return;
-
+        fromTab = true;
         if(container!=null && container.getChildCount()>position){
             container.getChildAt(position).performClick();
         }
