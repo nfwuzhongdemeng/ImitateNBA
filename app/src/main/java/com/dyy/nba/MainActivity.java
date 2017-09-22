@@ -1,5 +1,6 @@
 package com.dyy.nba;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -233,6 +234,11 @@ public class MainActivity extends BaseActivity<IMainView, MainInteractor, MainPr
 
             }
         });
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     private int menuPos = 0;

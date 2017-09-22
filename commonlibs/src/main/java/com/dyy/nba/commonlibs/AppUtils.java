@@ -12,9 +12,15 @@ public class AppUtils {
     private static BaseApplication sContext;
     private static Handler sHandler = new Handler(Looper.getMainLooper());
     private static Thread uiThread;
-    public static void init(BaseApplication sContext){
+    private static boolean isDebug;
+    public static void init(BaseApplication sContext,boolean debug){
         AppUtils.sContext = sContext;
-        uiThread = Thread.currentThread();
+        AppUtils.uiThread = Thread.currentThread();
+        AppUtils.isDebug = debug;
+    }
+
+    public static boolean getDebug(){
+        return isDebug;
     }
 
     public static Resources getResources(){
@@ -65,4 +71,21 @@ public class AppUtils {
         return sContext.getRootPath();
     }
 
+    /**
+     * 获取屏幕宽度
+     *
+     * @return
+     */
+    public static int getScreenWidth() {
+        return AppUtils.getSuperContext().getResources().getDisplayMetrics().widthPixels;
+    }
+
+    /**
+     * 获取屏幕高度
+     *
+     * @return
+     */
+    public static int getScreenHeight() {
+        return AppUtils.getSuperContext().getResources().getDisplayMetrics().heightPixels;
+    }
 }

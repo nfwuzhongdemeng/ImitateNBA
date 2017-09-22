@@ -1,12 +1,17 @@
 package com.dyy.nba;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 
 import com.dyy.nba.commonlibs.AppUtils;
 import com.dyy.nba.commonlibs.BaseApplication;
 import com.dyy.nba.commonlibs.CrashHandler;
+import com.dyy.nba.commonlibs.util.ToastUtil;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.facebook.imagepipeline.decoder.SimpleProgressiveJpegConfig;
 
 import java.io.File;
 
@@ -20,8 +25,49 @@ public class ImitateNBA extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         sContext = this;
-        AppUtils.init(this);
+        AppUtils.init(this,getDevelopType()==1);
         CrashHandler.getInstance().init(sContext);
+        initFresco();
+//        initRealm();
+    }
+
+//    private void initRealm() {
+//        Realm.init(this);
+////        RealmConfiguration config = new RealmConfiguration.Builder()
+////                .name(Config.dbName)
+////                .schemaVersion(Config.dbVersion)
+////                .encryptionKey(Config.dbKey.getBytes())
+////                .migration(DBVersion.getIntance())//升级数据库处理类（实现RealmMigration接口）
+////                .build();
+//
+//        RealmConfiguration config2 = new RealmConfiguration.Builder()
+//                .name(Config.cacheName)
+//                .encryptionKey(Config.cacheKey.getBytes())
+//                .inMemory()//缓存，因为关闭应用就结束，所以不设置版本
+//                .build();
+////        Realm.setDefaultConfiguration(config);
+//        CacheManager.init(config2);
+//    }
+
+    private int debug;
+    public int getDevelopType(){
+        if(debug == 0){
+            try {
+                ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+                this.debug = appInfo.metaData.getInt("debug");
+            } catch (PackageManager.NameNotFoundException e) {
+                // TODO Auto-generated catch block
+                ToastUtil.shorts("开发状态错误！请核对manifest中的元数据debug");
+            }
+        }
+        return debug;
+    }
+
+    private void initFresco() {
+        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
+                .setProgressiveJpegConfig(new SimpleProgressiveJpegConfig())
+                .build();
+        Fresco.initialize(this, config);
     }
 
     public static ImitateNBA getSuperContext(){

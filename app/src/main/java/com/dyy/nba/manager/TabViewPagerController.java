@@ -4,7 +4,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.dyy.nba.ImitateNBA;
 import com.dyy.nba.R;
 import com.dyy.nba.adapter.ViewPagerAdapter;
 import com.dyy.nba.commonlibs.view.TabLayout;
@@ -37,8 +36,8 @@ public class TabViewPagerController {
         List<View> views = new ArrayList<>();
 
         for (int i = 0; i < tabs.length; i++) {
-            TopNewListLayout listLayout = (TopNewListLayout) LayoutInflater.from(ImitateNBA.getSuperContext()).inflate(R.layout.page_top_new_sub_list, null);
-            listLayout.setText(tabs[i]);
+            TopNewListLayout listLayout = (TopNewListLayout) LayoutInflater.from(viewPager.getContext()).inflate(R.layout.page_top_new_sub_list, null);
+            listLayout.setTag(i);
             views.add(listLayout);
         }
 

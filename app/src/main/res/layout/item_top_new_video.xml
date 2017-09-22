@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@android:color/transparent">
+    <TextView
+        android:id="@+id/item_top_new_txt_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="left|start|top"
+        android:textSize="16sp"
+        android:text="30天30队之步行者，乔治出走，球队重建"/>
+    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+        android:id="@+id/temp_new_video_content"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+    <ImageView
+        android:id="@+id/temp_new_img_out_watch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_goto"
+        />
+
+</android.support.v7.widget.CardView>

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dyy.nba.ImitateNBA;
 import com.dyy.nba.R;
 import com.dyy.nba.commonlibs.AppUtils;
 import com.dyy.nba.model.listdata.MainMenuData;
@@ -37,7 +36,7 @@ public class MainRecyclerMenuAdapter extends RecyclerView.Adapter<MainRecyclerMe
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(ImitateNBA.getSuperContext()).inflate(R.layout.item_main_menu, parent,
+        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main_menu, parent,
                 false));
         return holder;
     }

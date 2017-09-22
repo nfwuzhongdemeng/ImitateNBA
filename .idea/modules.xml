@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ImitateNBA.iml" filepath="$PROJECT_DIR$/ImitateNBA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VideoPlayerLibrary/VideoPlayerLibrary.iml" filepath="$PROJECT_DIR$/VideoPlayerLibrary/VideoPlayerLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/commonlibs/commonlibs.iml" filepath="$PROJECT_DIR$/commonlibs/commonlibs.iml" />
     </modules>

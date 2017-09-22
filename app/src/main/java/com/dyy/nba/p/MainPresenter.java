@@ -36,7 +36,7 @@ public class MainPresenter extends BasePresenter<IMainView,MainInteractor> {
     }
 
     private List<View> getPages(){
-        return getInteractor().getPages();
+        return getInteractor().getPages(view.getContext());
     }
 
     public String getTitleByPos(int position){

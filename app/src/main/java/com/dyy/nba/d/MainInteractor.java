@@ -1,10 +1,10 @@
 package com.dyy.nba.d;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.dyy.nba.R;
-import com.dyy.nba.commonlibs.AppUtils;
 import com.dyy.nba.model.listdata.MainMenuData;
 
 import java.util.ArrayList;
@@ -44,10 +44,10 @@ public class MainInteractor implements IInteractor{
     };
 
     private List<View> myPages = new ArrayList<>();
-    public List<View> getPages() {
+    public List<View> getPages(Context context) {
         if(myPages.size() == 0){
             for(int i = 0; i < pages.length; i++){
-                View v= LayoutInflater.from(AppUtils.getSuperContext()).inflate(pages[i],null);
+                View v= LayoutInflater.from(context).inflate(pages[i],null);
                 myPages.add(v);
             }
         }

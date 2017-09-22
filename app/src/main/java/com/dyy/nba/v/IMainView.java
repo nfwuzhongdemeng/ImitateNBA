@@ -1,5 +1,6 @@
 package com.dyy.nba.v;
 
+import android.content.Context;
 import android.view.View;
 
 import com.dyy.nba.model.listdata.MainMenuData;
@@ -15,4 +16,6 @@ public interface IMainView extends IView{
     void initLeftMenu(List<MainMenuData> leftMenuData);
 
     void initViewPager(List<View> pages);
+
+    Context getContext();
 }

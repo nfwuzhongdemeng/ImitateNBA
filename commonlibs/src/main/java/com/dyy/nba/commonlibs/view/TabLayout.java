@@ -283,6 +283,11 @@ public class TabLayout extends HorizontalScrollView {
         }
 
 
+        if(followOffset < 0){
+            followOffset = 0;
+        }
+        if(followOffset > 1)
+            followOffset = 1;
         //渐变颜色计算
         int color = ColorUtil.caculateColor(selectWordColor, noSelectWordColor, followOffset);
         int color2 = ColorUtil.caculateColor(noSelectWordColor, selectWordColor, followOffset);
