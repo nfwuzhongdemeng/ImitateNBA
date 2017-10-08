@@ -186,6 +186,11 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
         }
     }
 
+//    public void pause(){
+//        if(mCurrentState == CURRENT_STATE_PLAYING)
+//        startButton.performClick();
+//    }
+
     @Override
     public void onClick(View v) {
         int i = v.getId();
@@ -640,6 +645,12 @@ public abstract class JCVideoPlayer extends FrameLayout implements View.OnClickL
                     });
                 }
             }
+        }
+    }
+
+    public void pause(){
+        if(mCurrentState == CURRENT_STATE_PLAYING){
+            startButton.performClick();
         }
     }
 

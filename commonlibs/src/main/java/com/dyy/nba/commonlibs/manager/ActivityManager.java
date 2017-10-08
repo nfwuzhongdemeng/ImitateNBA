@@ -60,4 +60,23 @@ public class ActivityManager {
             i = mActivities.size();
         }
     }
+
+    public void clearMemory(){
+        if(!hasActivityExist()){
+            MemoryManager.deleteMemory();
+        }
+    }
+
+    private boolean hasActivityExist() {
+        if(mActivities.size() == 0)
+            return false;
+
+        for (int i = mActivities.size() - 1; i >= 1; i--) {
+            if (mActivities.get(i) != null){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -63,4 +63,5 @@ public class NoScrollViewPager extends ViewPager {
         TypedArray t = getContext().obtainStyledAttributes(attrs, R.styleable.NoScrollViewPager);
         enableScroll = t.getBoolean(R.styleable.NoScrollViewPager_canScroll, true);
     }
+
 }

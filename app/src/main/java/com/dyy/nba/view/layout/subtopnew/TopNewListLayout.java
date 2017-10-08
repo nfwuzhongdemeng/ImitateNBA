@@ -77,8 +77,10 @@ public class TopNewListLayout extends BaseLinearContainer<ITopNewBaseView,TopNew
         }
         presenter.loadIndex(false);
     }
+
     private NewsRecyclerMediaAdapter adapter;
     private List<NewsItemBean> list = new ArrayList<>();
+
     @Override
     public void initView() {
         adapter = new NewsRecyclerMediaAdapter(list);

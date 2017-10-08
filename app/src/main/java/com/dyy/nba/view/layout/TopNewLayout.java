@@ -8,11 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 
 import com.dyy.nba.R;
+import com.dyy.nba.commonlibs.manager.MemoryManager;
 import com.dyy.nba.commonlibs.view.TabLayout;
 import com.dyy.nba.d.container.TopNewIndicator;
 import com.dyy.nba.manager.TabViewPagerController;
 import com.dyy.nba.p.container.TopNewPresenter;
 import com.dyy.nba.v.container.ITopNewsView;
+
+import static com.dyy.nba.commonlibs.manager.MemoryManager.getMemory;
 
 /**
  * Created by 段钰莹 on 2017/9/5.
@@ -61,4 +64,17 @@ public class TopNewLayout extends BaseLinearContainer<ITopNewsView,TopNewIndicat
         controller.setListener();
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+        ViewPager vp = (ViewPager) getViewById(R.id.top_new_vp);
+       if(hasWindowFocus){
+           int pageNum = MemoryManager.getMemory().getInt("pageNum");
+           vp.setCurrentItem(pageNum);
+        }else{
+           getMemory()
+                   .set("pageNum",vp.getCurrentItem())
+                   .commit();
+        }
+    }
 }

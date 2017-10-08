@@ -10,8 +10,12 @@ import com.dyy.nba.http.gson.JsonHelper;
 import com.dyy.nba.http.okhttp.OkHttpHelper;
 import com.dyy.nba.model.NewsIndex;
 import com.dyy.nba.model.NewsItem;
+import com.dyy.nba.model.VideoInfo;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
@@ -111,6 +115,43 @@ public class TopNewsService {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                cbk.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public static void getVideoRealUrls(String vid, final RequestCallback<VideoInfo> cbk) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(HttpConfig.TECENT_URL_SERVER_1)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .client(OkHttpHelper.getTecentClient()).build();
+        TopNewsApi api = retrofit.create(TopNewsApi.class);
+
+        Call<String> call = api.getVideoRealUrls(vid);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response != null && !TextUtils.isEmpty(response.body())) {
+                    String resp = response.body()
+                            .replaceAll("QZOutputJson=", "")
+                            .replaceAll(" ", "")
+                            .replaceAll("\n", "");
+                    if (resp.endsWith(";"))
+                        resp = resp.substring(0, resp.length() - 1);
+
+                    LogUtil.d(resp);
+
+                    VideoInfo info = new Gson().fromJson(resp, VideoInfo.class);
+                    cbk.onSuccess(info);
+
+                } else {
+                    cbk.onFailure("");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                LogUtil.e("getVideoRealUrls:" + t.toString());
                 cbk.onFailure(t.getMessage());
             }
         });

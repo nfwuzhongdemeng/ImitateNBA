@@ -63,12 +63,14 @@ public class JCFullScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //视频播放的强制横屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         View decor = this.getWindow().getDecorView();
         decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         try {
+            //直接把framelayout用context方式初始化，为何不直接new？不太懂。
             Constructor<JCVideoPlayerStandard> constructor = VIDEO_PLAYER_CLASS.getConstructor(Context.class);
             mJcVideoPlayer = constructor.newInstance(this);
             setContentView(mJcVideoPlayer);
@@ -103,6 +105,13 @@ public class JCFullScreenActivity extends Activity {
     protected void onPause() {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
+//        mJcVideoPlayer.pause();
 //        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

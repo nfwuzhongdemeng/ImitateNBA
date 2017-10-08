@@ -1,21 +1,11 @@
 package fm.jiecao.jcvideoplayer_lib;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.app.*;
+import android.content.*;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -63,6 +53,12 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
 
     }
 
+    /**
+     * 设置播放基本元素，播放地址，与播放内容
+     * @param url
+     * @param objects
+     * @return
+     */
     @Override
     public boolean setUp(String url, Object... objects) {
         if (objects.length == 0)
@@ -528,5 +524,13 @@ public class JCVideoPlayerStandard extends JCVideoPlayer {
 //    super.onCompletion();
 //    cancelDismissControlViewTimer();
 //  }
+
+  public void initFitSize(int width,int height){
+      ViewGroup.LayoutParams params = getLayoutParams();
+      params.width = width;
+      params.height = height;
+
+      setLayoutParams(params);
+  }
 
 }

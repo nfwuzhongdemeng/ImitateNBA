@@ -11,7 +11,11 @@ import android.widget.TextView;
 import com.dyy.nba.R;
 import com.dyy.nba.commonlibs.AppUtils;
 import com.dyy.nba.commonlibs.util.ItemAnimUtil;
+import com.dyy.nba.commonlibs.util.LogUtil;
+import com.dyy.nba.http.RequestCallback;
+import com.dyy.nba.http.tencent.TopNewsService;
 import com.dyy.nba.model.NewsItemBean;
+import com.dyy.nba.model.VideoInfo;
 import com.dyy.nba.util.FrescoUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -54,65 +58,115 @@ public class NewsRecyclerMediaAdapter  extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        NewsItemBean item = listData.get(position);
+        final NewsItemBean item = listData.get(position);
         holder.itemView.setTag(position);
+
         if(getItemViewType(position) == VIDEO){
-            if(!(holder instanceof VideoViewHolder)){
-                return;
-            }
-            VideoViewHolder videoViewHolder = (VideoViewHolder) holder;
-            String title = item.title;
-            String imgUrl = item.imgurl;
-            String url = item.url;
-            String realUrl = item.realUrl;
-
-            videoViewHolder.txtTitle.setText(item.title);
-            videoViewHolder.ivWatchWeb.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = (int) v.getTag();
-                    String url = listData.get(pos).url;
-                    //开网页
-                }
-            });
-            videoViewHolder.videoPlayer.setUp("", item.title);
-            if(realUrl == null || realUrl.length() == 0){
-                //重新获取url
-            }else{
-                videoViewHolder.videoPlayer.setUp(item.realUrl, item.title);
-            }
-
-            videoViewHolder.videoPlayer.thumbImageView.setController(FrescoUtils.getController(item.imgurl, videoViewHolder.videoPlayer.thumbImageView));
-            ViewGroup.LayoutParams params = videoViewHolder.videoPlayer.getLayoutParams();
-            params.height = AppUtils.getScreenWidth() / 2;
-            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            videoViewHolder.videoPlayer.setLayoutParams(params);
+            setVideoLineData(holder,item);
 
         }else{
-            if(!(holder instanceof PictureViewHolder)){
-                return;
-            }
-
-            PictureViewHolder pictureViewHolder = (PictureViewHolder) holder;
-            String title = item.title;
-            String imgUrl = item.imgurl;
-            String pub_time = item.pub_time;
-
-            pictureViewHolder.txtTitle.setText(title);
-            pictureViewHolder.txtTime.setText(pub_time);
-
-            if (pictureViewHolder.draweeView != null) { // @bugreport NullPointerException
-                pictureViewHolder.draweeView.setController(FrescoUtils.getController(item.imgurl, pictureViewHolder.draweeView));
-                ViewGroup.LayoutParams params = pictureViewHolder.draweeView.getLayoutParams();
-                params.height = AppUtils.getScreenWidth() / 2;
-                params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                pictureViewHolder.draweeView.setLayoutParams(params);
-            }
+            setPictureLineData(holder,item);
 
         }
 
         animUtil.showAnimDown(holder.itemView,position);
     }
+
+    private void setVideoLineData(final RecyclerView.ViewHolder holder, final NewsItemBean item) {
+        if(!(holder instanceof VideoViewHolder)){
+            return;
+        }
+
+        VideoViewHolder videoViewHolder = (VideoViewHolder) holder;
+
+        videoViewHolder.txtTitle.setText(item.title);
+        videoViewHolder.ivWatchWeb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = (int) v.getTag();
+                if(pos == (int)(holder.itemView.getTag())){
+                    openVideoInBrowser(item);
+                }
+            }
+        });
+
+        initVideoUrl(videoViewHolder.videoPlayer,item);
+        videoViewHolder.videoPlayer.initFitSize(ViewGroup.LayoutParams.MATCH_PARENT,AppUtils.getScreenWidth() / 2);
+        videoViewHolder.videoPlayer.thumbImageView.setController(FrescoUtils.getController(item.imgurl, videoViewHolder.videoPlayer.thumbImageView));
+    }
+
+    private void setPictureLineData(RecyclerView.ViewHolder holder, NewsItemBean item) {
+        if(!(holder instanceof PictureViewHolder)){
+            return;
+        }
+
+        PictureViewHolder pictureViewHolder = (PictureViewHolder) holder;
+        pictureViewHolder.txtTitle.setText(item.title);
+        pictureViewHolder.txtTime.setText(item.pub_time);
+
+        if (pictureViewHolder.draweeView != null) { // @bugreport NullPointerException
+            pictureViewHolder.draweeView.setController(FrescoUtils.getController(item.imgurl, pictureViewHolder.draweeView));
+            initPictureMeausure(pictureViewHolder.draweeView);
+        }
+    }
+
+    private void initPictureMeausure(SimpleDraweeView showPictureView) {
+        ViewGroup.LayoutParams params = showPictureView.getLayoutParams();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = AppUtils.getScreenWidth() / 2;
+
+        showPictureView.setLayoutParams(params);
+    }
+
+    private void openVideoInBrowser(NewsItemBean item) {
+    }
+
+    private void initVideoUrl(JCVideoPlayerStandard videoPlayer, NewsItemBean item) {
+        videoPlayer.setUp("", item.title);
+        if(item.realUrl == null || item.realUrl.length() == 0){
+            initPlayUrlByRedirect(videoPlayer,item);
+        }else{
+            videoPlayer.setUp(item.realUrl, item.title);
+        }
+    }
+
+    private void initPlayUrlByRedirect(final JCVideoPlayerStandard videoPlayer, final NewsItemBean item) {
+        TopNewsService.getVideoRealUrls(item.vid, new RequestCallback<VideoInfo>() {
+            @Override
+            public void onSuccess(VideoInfo videoRedirectInfo) {
+                if (hasRedirectUrl(videoRedirectInfo)) {
+                    String redirectUrl = getRedirectUrl(videoRedirectInfo);
+
+                    item.realUrl = redirectUrl;
+
+                    setPlayUrlByRedirect(videoPlayer,redirectUrl,item.title);
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+                LogUtil.i("real-url：" + message);
+            }
+        });
+    }
+
+    private String getRedirectUrl(VideoInfo videoRedirectInfo) {
+        String vid = videoRedirectInfo.vl.vi.get(0).vid;
+        String vkey = videoRedirectInfo.vl.vi.get(0).fvkey;
+        return videoRedirectInfo.vl.vi.get(0).ul.ui.get(0).url + vid + ".mp4?vkey=" + vkey;
+    }
+
+    private void setPlayUrlByRedirect(JCVideoPlayerStandard videoPlayer, String redirectUrl,String title) {
+            videoPlayer.setUp(redirectUrl, title);
+
+            LogUtil.i("title：" + title);
+            LogUtil.i("real-url：" + redirectUrl);
+    }
+
+    private boolean hasRedirectUrl(VideoInfo videoRedirectInfo) {
+        return videoRedirectInfo.vl.vi != null && videoRedirectInfo.vl.vi.size() > 0;
+    }
+
     ItemAnimUtil animUtil = new ItemAnimUtil();
 
 

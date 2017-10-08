@@ -18,10 +18,12 @@ import android.widget.LinearLayout;
 
 import com.dyy.nba.adapter.MainRecyclerMenuAdapter;
 import com.dyy.nba.adapter.ViewPagerAdapter;
+import com.dyy.nba.commonlibs.manager.MemoryManager;
 import com.dyy.nba.d.MainInteractor;
 import com.dyy.nba.model.listdata.MainMenuData;
 import com.dyy.nba.p.MainPresenter;
 import com.dyy.nba.v.IMainView;
+import com.dyy.nba.view.NoScrollViewPager;
 
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class MainActivity extends BaseActivity<IMainView, MainInteractor, MainPr
     @BindView(R.id.common_toolbar)
     Toolbar commonToolbar;
     @BindView(R.id.activity_main_viewpager)
-    ViewPager mViewPager;
+    NoScrollViewPager mViewPager;
     @BindView(R.id.activity_main_linear_menu)
     LinearLayout mainLinearMenu;
     @BindView(R.id.activity_main_drawer)
@@ -50,10 +52,12 @@ public class MainActivity extends BaseActivity<IMainView, MainInteractor, MainPr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //这部分只写去标题，其他放在initChildView,为了presenter初始化数据前，控件初始化完毕
-
+        if(savedInstanceState == null){
+            MemoryManager.deleteMemory();//开启app时清内存缓存
+        }
         super.onCreate(savedInstanceState);
-    }
 
+    }
 
     @Override
     protected void initChildView(Bundle savedInstanceState) {
@@ -64,6 +68,12 @@ public class MainActivity extends BaseActivity<IMainView, MainInteractor, MainPr
             initSaveData(savedInstanceState);
         }
         initToolbarListener();
+//        String url = "http://219.132.192.154/sports.tc.qq.com/A00IUPP6ZPlrz4sbQAnHyV7gkZ3o7_7QMvclZUCYhlII/r0024p3q238.mp4?vkey=E5FA5166A123563204B2E5AFD263D05E5F89EC64FC6EC9844D97E3E7A46E1EAC4DA1E1687E616532E4C262E17371E22B89E5F1078D2A8E9CB05D75CFE1B57FC13BB50CBA9597D5B7D9CA8A21EF824AF7FD2613E854443E3B9F054E01B24744B172B74AB4EA377A4C";
+//        String imageUrl = "http://inews.gtimg.com/newsapp_ls/0/2134764057_640330/0";
+//                JCVideoPlayerStandard videoPlayer = (JCVideoPlayerStandard) findViewById(R.id.video_player);
+//        videoPlayer.setUp(url,"标题");
+//        videoPlayer.initFitSize(ViewGroup.LayoutParams.MATCH_PARENT, AppUtils.getScreenWidth() / 2);
+//        videoPlayer.thumbImageView.setController(FrescoUtils.getController(imageUrl, videoPlayer.thumbImageView));
     }
 
     /**
@@ -102,7 +112,9 @@ public class MainActivity extends BaseActivity<IMainView, MainInteractor, MainPr
         super.onSaveInstanceState(outState);
         outState.putBoolean("toggle", toggleOpen);
         outState.putInt("menuPos",menuPos);
+
     }
+
 
     private boolean toggleOpen = false;
 

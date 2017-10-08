@@ -40,12 +40,22 @@ public class MainPresenter extends BasePresenter<IMainView,MainInteractor> {
     }
 
     public String getTitleByPos(int position){
-        List<MainMenuData> temp = getLeftMenuData();
-        if(temp == null) return "";
+        List<MainMenuData> leftMenuItems = getLeftMenuData();
+
+        if(leftMenuItems != null){
+            return getLeftMenuName(leftMenuItems,getSafePosition(position,leftMenuItems.size()));
+        }
+
+        return "";
+    }
+
+    private String getLeftMenuName(List<MainMenuData> leftMenuItems,int position) {
+        return leftMenuItems.get(position).getTxt();
+    }
+
+    private int getSafePosition(int position, int size) {
         if(position < 0) position = 0;
-        if(position > temp.size()) position = temp.size() - 1;
-
-
-        return temp.get(position).getTxt();
+        if(position > size) position = size - 1;
+        return position;
     }
 }

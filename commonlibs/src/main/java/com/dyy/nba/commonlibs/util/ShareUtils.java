@@ -111,13 +111,13 @@ public class ShareUtils {
 
     public void commit(){
         if(editor!=null){
-            editor.commit();
+            editor.apply();
         }
     }
 
     public void clear(){
         getEditor().clear();
-        getEditor().commit();
+        commit();
     }
 
     public void remove(String name){
@@ -171,4 +171,5 @@ public class ShareUtils {
     public Set<String> getSet(String name,Set<String> defaultValue){
         return getShare().getStringSet(name,defaultValue);
     }
+
 }

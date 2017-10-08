@@ -13,4 +13,7 @@ public interface TopNewsApi {
     Call<String> getNewsIndex(@Query("column") String column);
     @GET("/news/item")
     Call<String> getNewsItem(@Query("column") String column, @Query("articleIds") String articleIds);
+
+    @GET("getinfo?platform=11001&charge=0&otype=json")
+    Call<String> getVideoRealUrls(@Query("vids") String vids);
 }

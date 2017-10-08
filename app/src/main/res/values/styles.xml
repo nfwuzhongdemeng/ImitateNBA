@@ -16,6 +16,10 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:actionMenuTextColor">@android:color/white</item>
     </style>
+    <style name="AppTheme.NoneTranslucent" parent="AppTheme">
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
 
     <style name="SlideRightAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_down_in</item>
